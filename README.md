@@ -9,6 +9,43 @@ ES2015 to CommonJS import/export transformer
 This module does one thing only:
 it loosely transpiles **ES2015** [import](https://developer.mozilla.org/en-US/docs/web/javascript/reference/statements/import)/[export](https://developer.mozilla.org/en-US/docs/web/javascript/reference/statements/export) statements **into** valid **CommonJS** in order to fix the only part of Node that's incompatible with modern JS.
 
+## How to
+
+You can use _ascjs_ as binary utility or as module.
+
+```sh
+npm install -g ascjs
+
+# to see what you can do
+ascjs --help
+
+```
+
+As executable, you can use _ascjs_ to output, or save, some code content.
+```sh
+ascjs code
+ascjs sourceFile
+ascjs sourceFile destFile
+
+# folders are recursively parsed
+# destFolder is mandatory
+ascjs sourceFolder destFolder
+```
+
+You can also use it via pipe operator.
+```sh
+echo code | ascjs
+cat source.js | ascjs | uglifyjs -o dest.js
+```
+
+As module, you can require it and use it to convert ESM to CJS.
+```js
+const ascjs = require('ascjs');
+
+ascjs('import "test";');
+// require("test");
+```
+
 ### Features
 
   * extremely lightweight, based on [cherow](https://github.com/cherow/cherow) for performance and reliability, it transforms only imports/exports ignoring everything else
