@@ -1,0 +1,7 @@
+coverage/*
+node_modules/*
+test/*
+.gitignore
+.travis.yml
+test.js
+package-lock.json
