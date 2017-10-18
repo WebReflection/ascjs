@@ -27,7 +27,7 @@
   },
   "homepage": "https://github.com/WebReflection/ascjs#readme",
   "dependencies": {
-    "cherow": "^0.8.9"
+    "cherow": "^0.9.1"
   },
   "devDependencies": {
     "coveralls": "^3.0.0",
