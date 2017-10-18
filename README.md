@@ -77,8 +77,9 @@ export {func, val};
 ```
 into the following one:
 ```js
-const func = (m => m.__esModule ? m : {default: m})(require('./module.js')).default;
-const {a, b} = func;
+'use strict';
+const func = (m => m.__esModule ? m.default : m)(require('./module.js'));
+const {a, b} = require('./module.js');
 const tmp = require('other');
 
 const val = 123;

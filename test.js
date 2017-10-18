@@ -88,11 +88,11 @@ const tests = [
   },
   {
     esm: `import defaultExport, { otherExport } from "module-name"`,
-    cjs: `const defaultExport = (m => m.__esModule ? m : {default: m})(require("module-name")).default\nconst { otherExport } = defaultExport`
+    cjs: `const defaultExport = (m => m.__esModule ? m.default : m)(require("module-name"))\nconst { otherExport } = require("module-name")`
   },
   {
     esm: `import defaultExport, * as name from "module-name";`,
-    cjs: `const defaultExport = (m => m.__esModule ? m : {default: m})(require("module-name")).default;\nconst name = defaultExport;`
+    cjs: `const defaultExport = (m => m.__esModule ? m.default : m)(require("module-name"));\nconst name = require("module-name");`
   },
   {
     esm: `import "foo";`,
@@ -112,7 +112,7 @@ console.log(`${bold('ascjs')} v${require('./package.json').version} - ${tests.le
 
 tests.forEach(code => {
   console.assert(
-    code.cjs === ascjs(code.esm),
+    ("'use strict';\n" + code.cjs) === ascjs(code.esm),
     `\n${bold('Source')}\n${code.esm}\n${bold('Expected')}\n${code.cjs}\n${bold('Received')}\n${ascjs(code.esm)}\n`
   );
 });

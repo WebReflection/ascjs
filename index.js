@@ -2,7 +2,7 @@ const cherow = require('cherow');
 
 const babelified = `Object.defineProperty(exports, '__esModule', {value: true}).default`;
 const asDefault = name => name === 'default' ? babelified : `exports.${name}`;
-const fromDefault = defaultImport => `(m => m.__esModule ? m : {default: m})(${defaultImport})`;
+const fromDefault = defaultImport => `(m => m.__esModule ? m.default : m)(${defaultImport})`;
 
 const replace = {
 
@@ -22,9 +22,8 @@ const replace = {
         switch(specifier.type) {
           case 'ImportDefaultSpecifier':
             imported.push(
-              `const ${specifier.local.name} = ${fromDefault(defaultImport)}.default${EOL}`
+              `const ${specifier.local.name} = ${fromDefault(defaultImport)}${EOL}`
             );
-            defaultImport = specifier.local.name;
             break;
           case 'ImportNamespaceSpecifier':
             imported.push(
@@ -142,7 +141,7 @@ const parse = code => {
     c = chunks[i].end;
   }
   out.push(length ? code.slice(chunks[length - 1].end) : code);
-  return out.join('');
+  return "'use strict';\n" + out.join('');
 };
 
 parse.options = {
