@@ -6,6 +6,12 @@ ES2015 to CommonJS import/export transformer
 
 - - -
 
+## A simple bundler ?
+
+Fully based on _ascjs_, [asbundle](https://github.com/WebReflection/asbundle) is a no-brainer to create out of the box browser compatible bundles. Don't miss it out!
+
+- - -
+
 This module does one thing only:
 it loosely transpiles **ES2015** [import](https://developer.mozilla.org/en-US/docs/web/javascript/reference/statements/import)/[export](https://developer.mozilla.org/en-US/docs/web/javascript/reference/statements/export) statements **into** valid **CommonJS** in order to fix the only part of Node that's incompatible with modern JS.
 
