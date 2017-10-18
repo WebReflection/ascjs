@@ -8,9 +8,9 @@ ES2015 to CommonJS import/export transformer
 
 - - -
 
-## A simple bundler ?
+### Looking for a CommonJS minimalistic bundler ?
 
-Fully based on _ascjs_, [asbundle](https://github.com/WebReflection/asbundle) is a no-brainer to create out of the box browser compatible bundles. Don't miss it out!
+Fully based on _ascjs_, **[asbundle](https://github.com/WebReflection/asbundle)** is a no-brainer to create out of the box browser compatible bundles. Don't miss it out!
 
 - - -
 
