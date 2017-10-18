@@ -146,9 +146,10 @@ const parse = code => {
 };
 
 parse.options = {
+  jsx: true,
   next: true,
   ranges: true,
-  jsx: true
+  v8: true
 };
 
 module.exports = parse;
