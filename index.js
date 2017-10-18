@@ -133,14 +133,15 @@ const parse = code => {
     }
   });
   const length = chunks.length;
-  for (let c = 0, i = 0; i < length; i++) {
+  let c = 0;
+  for (let i = 0; i < length; i++) {
     out.push(
       code.slice(c, chunks[i].start),
       chunks[i].cjs
     );
     c = chunks[i].end;
   }
-  out.push(length ? code.slice(chunks[length - 1].end) : code);
+  out.push(length ? code.slice(c) : code);
   return "'use strict';\n" + out.join('');
 };
 
