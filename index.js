@@ -1,15 +1,28 @@
-const cherow = require('cherow');
+const esprima = require('esprima');
+const defaultOptions = {
+  sourceType: 'module',
+  jsx: true,
+  range: true,
+  tolerant: true
+};
 
 const babelified = `Object.defineProperty(exports, '__esModule', {value: true}).default`;
 const asDefault = name => name === 'default' ? babelified : `exports.${name}`;
 const fromDefault = defaultImport => `(m => m.__esModule ? m.default : m)(${defaultImport})`;
 
+const slice = (code, info) => code.slice(info.range[0], info.range[1]);
+const chunk = (info, esm, cjs) => ({
+  start: info.range[0],
+  end: info.range[1],
+  esm, cjs
+});
+
 const replace = {
 
   ImportDeclaration(code, item) {
     const source = item.source;
-    const name = code.slice(source.start, source.end);
-    const esm = code.slice(item.start, item.end);
+    const name = slice(code, source);
+    const esm = slice(code, item);
     const SEPS = /\{(\s+)/.test(esm) ? RegExp.$1 : '';
     const SEPE = /(\s+)\}/.test(esm) ? RegExp.$1 : '';
     const SEP = /(,\s+)[^{]/.test(esm) ? RegExp.$1 : ', ';
@@ -47,30 +60,21 @@ const replace = {
     } else {
       imported.push(`${defaultImport}${EOL}`);
     }
-    return {
-      start: item.start,
-      end: item.end,
-      esm,
-      cjs: imported.join('\n')
-    };
+    return chunk(item, esm, imported.join('\n'));
   },
 
   ExportAllDeclaration(code, item) {
     const source = item.source;
-    const esm = code.slice(item.start, item.end);
+    const esm = slice(code, item);
     const cjs = `(m => Object.keys(m).map(k => k !== 'default' && (exports[k] = m[k])))\n(require(${
-      code.slice(source.start, source.end
-    )}));`;
-    return {
-      start: item.start,
-      end: item.end,
-      esm, cjs
-    };
+      slice(code, source)
+    }));`;
+    return chunk(item, esm, cjs);
   },
 
   ExportDefaultDeclaration(code, item) {
     const declaration = item.declaration;
-    const esm = code.slice(item.start, item.end);
+    const esm = slice(code, item);
     let cjs;
     switch (declaration.type) {
       case 'AssignmentExpression':
@@ -85,17 +89,13 @@ const replace = {
         cjs = esm.replace(/^export\s+default\s+/, `${babelified} = `);
         break;
     }
-    return {
-      start: item.start,
-      end: item.end,
-      esm, cjs
-    };
+    return chunk(item, esm, cjs);
   },
 
   ExportNamedDeclaration(code, item) {
     const declaration = item.declaration;
     const source = item.source;
-    const esm = code.slice(item.start, item.end);
+    const esm = slice(code, item);
     const EOL = /;$/.test(esm) ? ';\n' : '\n';
     let cjs = source ? '(m => {\n' : '';
     item.specifiers.forEach(specifier => {
@@ -112,26 +112,29 @@ const replace = {
       });
     }
     if (source) cjs += `})(require(${
-      code.slice(source.start, source.end)
+      slice(code, source)
     }));\n`;
-    return {
-      start: item.start,
-      end: item.end,
-      esm,
-      cjs: cjs.trim()
-    };
+    return chunk(item, esm, cjs.trim());
   }
 };
 
-const parse = code => {
+const parse = (code, options) => {
   const out = [];
   const chunks = [];
   code = code.toString();
-  cherow.parseModule(code, parse.options).body.forEach(item => {
-    if (replace.hasOwnProperty(item.type)) {
-      chunks.push(replace[item.type](code, item));
+  esprima.parse(
+    code,
+    Object.assign(
+      {},
+      defaultOptions,
+      options
+    ),
+    item => {
+      if (replace.hasOwnProperty(item.type)) {
+        chunks.push(replace[item.type](code, item));
+      }
     }
-  });
+  );
   const length = chunks.length;
   let c = 0;
   for (let i = 0; i < length; i++) {
@@ -143,13 +146,6 @@ const parse = code => {
   }
   out.push(length ? code.slice(c) : code);
   return "'use strict';\n" + out.join('');
-};
-
-parse.options = {
-  jsx: true,
-  next: true,
-  ranges: true,
-  v8: true
 };
 
 module.exports = parse;
