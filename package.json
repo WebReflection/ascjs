@@ -1,6 +1,6 @@
 {
   "name": "ascjs",
-  "version": "0.1.9",
+  "version": "1.0.1",
   "description": "ES2015 to CommonJS import/export transformer",
   "bin": "bin.js",
   "main": "index.js",
@@ -27,7 +27,7 @@
   },
   "homepage": "https://github.com/WebReflection/ascjs#readme",
   "dependencies": {
-    "cherow": "0.9.9"
+    "esprima": "^4.0.0"
   },
   "devDependencies": {
     "coveralls": "^3.0.0",
