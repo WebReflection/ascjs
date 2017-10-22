@@ -56,7 +56,7 @@ ascjs('import "test";');
 
 ### Features
 
-  * extremely lightweight, based on [cherow](https://github.com/cherow/cherow) for performance and reliability, it transforms only imports/exports ignoring everything else
+  * extremely lightweight, based on [esprima](http://esprima.org) for performance and reliability, it transforms only imports/exports ignoring everything else
   * produces modern JavaScript, you are in charge of extra transformations if needed
   * indentation, spaces, semi or no-semi are preserved: beautiful source code remains beautiful
   * uses same [Babel](http://babeljs.io) convention, resolving `export default ...` intent as `exports.default`
