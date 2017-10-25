@@ -105,6 +105,14 @@ const tests = [
   {
     esm: `import "foo"`,
     cjs: `require("foo")`
+  },
+  {
+    esm: `export function test() {}`,
+    cjs: `function test() {}\nexports.test = test`
+  },
+  {
+    esm: `export default function test() {};`,
+    cjs: `function test() {}\nObject.defineProperty(exports, '__esModule', {value: true}).default = test;`
   }
 ];
 

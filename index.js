@@ -107,7 +107,7 @@ const replace = {
     });
     if (declaration) {
       cjs += esm.replace(/^export\s+/, '') + '\n';
-      declaration.declarations.forEach(specifier => {
+      (declaration.declarations || [declaration]).forEach(specifier => {
         cjs += `${asDefault(specifier.id.name)} = ${specifier.id.name}${EOL}`;
       });
     }
