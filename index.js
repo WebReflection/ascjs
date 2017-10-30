@@ -21,7 +21,7 @@ const replace = {
 
   ImportDeclaration(code, item) {
     const source = item.source;
-    const name = slice(code, source);
+    const name = withoutCDN(slice(code, source));
     const esm = slice(code, item);
     const SEPS = /\{(\s+)/.test(esm) ? RegExp.$1 : '';
     const SEPE = /(\s+)\}/.test(esm) ? RegExp.$1 : '';
@@ -67,7 +67,7 @@ const replace = {
     const source = item.source;
     const esm = slice(code, item);
     const cjs = `(m => Object.keys(m).map(k => k !== 'default' && (exports[k] = m[k])))\n(require(${
-      slice(code, source)
+      withoutCDN(slice(code, source))
     }));`;
     return chunk(item, esm, cjs);
   },
@@ -112,7 +112,7 @@ const replace = {
       });
     }
     if (source) cjs += `})(require(${
-      slice(code, source)
+      withoutCDN(slice(code, source))
     }));\n`;
     return chunk(item, esm, cjs.trim());
   }
@@ -147,5 +147,9 @@ const parse = (code, options) => {
   out.push(length ? code.slice(c) : code);
   return "'use strict';\n" + out.join('');
 };
+
+const withoutCDN = name =>
+  /^(['"`])https?:\/\/(?:unpkg\.com)\/([^@/]+)\S*?\1$/.test(name) ?
+    `${RegExp.$1}${RegExp.$2}${RegExp.$1}` : name;
 
 module.exports = parse;
