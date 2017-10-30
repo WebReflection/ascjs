@@ -1,19 +1,42 @@
-const esprima = require('esprima');
+const parser = require('babylon');
 const defaultOptions = {
   sourceType: 'module',
-  jsx: true,
-  range: true,
-  tolerant: true
+  plugins: [
+    'estree',
+    'jsx',
+    'flow',
+    'typescript',
+    'doExpressions',
+    'objectRestSpread',
+    'decorators',
+    'decorators2',
+    'classProperties',
+    'classPrivateProperties',
+    'classPrivateMethods',
+    'exportExtensions',
+    'asyncGenerators',
+    'functionBind',
+    'functionSent',
+    'dynamicImport',
+    'numericSeparator',
+    'optionalChaining',
+    'importMeta',
+    'bigInt',
+    'optionalCatchBinding',
+    'throwExpressions',
+    'pipelineOperator',
+    'nullishCoalescingOperator'
+  ]
 };
 
 const babelified = `Object.defineProperty(exports, '__esModule', {value: true}).default`;
 const asDefault = name => name === 'default' ? babelified : `exports.${name}`;
 const fromDefault = defaultImport => `(m => m.__esModule ? m.default : m)(${defaultImport})`;
 
-const slice = (code, info) => code.slice(info.range[0], info.range[1]);
+const slice = (code, info) => code.slice(info.start, info.end);
 const chunk = (info, esm, cjs) => ({
-  start: info.range[0],
-  end: info.range[1],
+  start: info.start,
+  end: info.end,
   esm, cjs
 });
 
@@ -119,22 +142,22 @@ const replace = {
 };
 
 const parse = (code, options) => {
+  code = code.toString();
   const out = [];
   const chunks = [];
-  code = code.toString();
-  esprima.parse(
+  const parsed = parser.parse(
     code,
     Object.assign(
       {},
       defaultOptions,
       options
-    ),
-    item => {
-      if (replace.hasOwnProperty(item.type)) {
-        chunks.push(replace[item.type](code, item));
-      }
-    }
+    )
   );
+  parsed.program.body.forEach(item => {
+    if (replace.hasOwnProperty(item.type)) {
+      chunks.push(replace[item.type](code, item));
+    }
+  });
   const length = chunks.length;
   let c = 0;
   for (let i = 0; i < length; i++) {
