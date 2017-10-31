@@ -39,6 +39,15 @@ ${' '.repeat(info.description.length)
       });
     } else if (stat.isDirectory() && dest && fs.statSync(dest).isDirectory()) {
       const path = require('path');
+      const mkdir = dir => {
+        try{ fs.mkdirSync(dir); }
+        catch(e){
+          if(e.errno === 34){
+            mkdir(path.dirname(dir));
+            mkdir(dir);
+          }
+        }
+      };
       (function walkThrough(source, dest) {
         fs.readdir(source, (err, files) => {
           if (err) throw err;
@@ -53,6 +62,7 @@ ${' '.repeat(info.description.length)
                   if (/\.(?:m\.?)?js$/.test(file)) {
                     fs.readFile(path.join(source, file), (err, content) => {
                       if (err) throw err;
+                      mkdir(dest);
                       fs.writeFile(
                         path.join(dest, file),
                         ascjs(content),
