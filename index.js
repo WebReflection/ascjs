@@ -49,7 +49,7 @@ const replace = {
     const SEPS = /\{(\s+)/.test(esm) ? RegExp.$1 : '';
     const SEPE = /(\s+)\}/.test(esm) ? RegExp.$1 : '';
     const SEP = /(,\s+)[^{]/.test(esm) ? RegExp.$1 : ', ';
-    const EOL = ';'; // /;$/.test(esm) ? ';' : '';
+    const EOL = /;$/.test(esm) ? ';' : '';
     const imported = [];
     const specifiers = [];
     let defaultImport = `require(${name})`;
@@ -119,7 +119,7 @@ const replace = {
     const declaration = item.declaration;
     const source = item.source;
     const esm = slice(code, item);
-    const EOL = ';\n'; // /;$/.test(esm) ? ';\n' : '\n';
+    const EOL = /;$/.test(esm) ? ';\n' : '\n';
     let cjs = source ? '(m => {\n' : '';
     item.specifiers.forEach(specifier => {
       cjs += `${
