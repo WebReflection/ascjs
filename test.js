@@ -11,11 +11,11 @@ const tests = [
   // exports
   {
     esm: `export { name1, name2, nameN }`,
-    cjs: `exports.name1 = name1\nexports.name2 = name2\nexports.nameN = nameN`
+    cjs: `exports.name1 = name1;\nexports.name2 = name2;\nexports.nameN = nameN;`
   },
   {
     esm: `export { name1, name2, nameN } from "module"`,
-    cjs: `(m => {\n  exports.name1 = m.name1\n  exports.name2 = m.name2\n  exports.nameN = m.nameN\n})(require("module"));`
+    cjs: `(m => {\n  exports.name1 = m.name1;\n  exports.name2 = m.name2;\n  exports.nameN = m.nameN;\n})(require("module"));`
   },
   {
     esm: `export { name0, name1 as default };`,
@@ -23,7 +23,7 @@ const tests = [
   },
   {
     esm: `export { name0, name1 as default } from "shenanigans"`,
-    cjs: `(m => {\n  exports.name0 = m.name0\n  Object.defineProperty(exports, '__esModule', {value: true}).default = m.name1\n})(require("shenanigans"));`
+    cjs: `(m => {\n  exports.name0 = m.name0;\n  Object.defineProperty(exports, '__esModule', {value: true}).default = m.name1;\n})(require("shenanigans"));`
   },
   {
     esm: `export { variable1 as name1, variable2 as name2, nameN };`,
@@ -72,7 +72,7 @@ const tests = [
   },
   {
     esm: `import {name} from "module-name"`,
-    cjs: `const {name} = require("module-name")`
+    cjs: `const {name} = require("module-name");`
   },
   {
     esm: `import { name as alias } from "module-name";`,
@@ -88,7 +88,7 @@ const tests = [
   },
   {
     esm: `import defaultExport, { otherExport } from "module-name"`,
-    cjs: `const defaultExport = (m => m.__esModule ? m.default : m)(require("module-name"))\nconst { otherExport } = require("module-name")`
+    cjs: `const defaultExport = (m => m.__esModule ? m.default : m)(require("module-name"));\nconst { otherExport } = require("module-name");`
   },
   {
     esm: `import defaultExport, * as name from "module-name";`,
@@ -104,11 +104,11 @@ const tests = [
   },
   {
     esm: `import "foo"`,
-    cjs: `require("foo")`
+    cjs: `require("foo");`
   },
   {
     esm: `export function test() {}`,
-    cjs: `function test() {}\nexports.test = test`
+    cjs: `function test() {}\nexports.test = test;`
   },
   {
     esm: `export default function test() {};`,
@@ -116,7 +116,7 @@ const tests = [
   },
   {
     esm: `import "https://unpkg.com/hyperhtml@latest/min.js"`,
-    cjs: `require("hyperhtml")`
+    cjs: `require("hyperhtml");`
   }
 ];
 
