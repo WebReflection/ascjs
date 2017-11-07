@@ -132,3 +132,12 @@ tests.forEach(code => {
     `\n${bold('Source')}\n${code.esm}\n${bold('Expected')}\n${code.cjs}\n${bold('Received')}\n${ascjs(code.esm)}\n`
   );
 });
+
+console.log(
+  ascjs(
+    'import I from "test";\nexport default function E() {}',
+    {IMPORT: 'require.I', EXPORT: 'require.E(exports)'}
+  ) ===
+  `'use strict';\nconst I = require.I(require("test"));\nfunction E() {}\nrequire.E(exports).default = E`,
+  'both import and export can be overwritten'
+);
