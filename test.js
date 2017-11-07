@@ -121,6 +121,14 @@ const tests = [
   {
     esm: `import "https://unpkg.com/hyperhtml@latest/min.js"`,
     cjs: `require("hyperhtml")`
+  },
+  {
+    esm: `export default {a: 1, b: 2};`,
+    cjs: `Object.defineProperty(exports, '__esModule', {value: true}).default = {a: 1, b: 2};`
+  },
+  {
+    esm: `export default [1, 2, 3]`,
+    cjs: `Object.defineProperty(exports, '__esModule', {value: true}).default = [1, 2, 3]`
   }
 ];
 

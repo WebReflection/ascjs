@@ -110,6 +110,8 @@ const replace = {
         }
         break;
       case 'Identifier':
+      case 'ObjectExpression':
+      default:
         cjs = esm.replace(/^export\s+default\s+/, `${parse.info.EXPORT}.default = `);
         break;
     }
