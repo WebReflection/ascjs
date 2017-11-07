@@ -29,9 +29,10 @@ const defaultOptions = {
   ]
 };
 
-const babelified = `Object.defineProperty(exports, '__esModule', {value: true}).default`;
-const asDefault = name => name === 'default' ? babelified : `exports.${name}`;
-const fromDefault = defaultImport => `(m => m.__esModule ? m.default : m)(${defaultImport})`;
+const EXPORT = `Object.defineProperty(exports, '__esModule', {value: true}).default`;
+const IMPORT = `(m => m.__esModule ? m.default : m)`;
+const asDefault = name => name === 'default' ? EXPORT : `exports.${name}`;
+const fromDefault = defaultImport => `${IMPORT}(${defaultImport})`;
 
 const slice = (code, info) => code.slice(info.start, info.end);
 const chunk = (info, esm, cjs) => ({
@@ -103,13 +104,13 @@ const replace = {
       case 'AssignmentExpression':
       case 'FunctionDeclaration':
         if (declaration.id) {
-          cjs = `${esm.replace(/^export\s+default\s+/, '')}\n${babelified} = ${declaration.id.name}`;
+          cjs = `${esm.replace(/^export\s+default\s+/, '')}\n${EXPORT} = ${declaration.id.name}`;
         } else {
-          cjs = esm.replace(/^export\s+default\s+/, `${babelified} = `);
+          cjs = esm.replace(/^export\s+default\s+/, `${EXPORT} = `);
         }
         break;
       case 'Identifier':
-        cjs = esm.replace(/^export\s+default\s+/, `${babelified} = `);
+        cjs = esm.replace(/^export\s+default\s+/, `${EXPORT} = `);
         break;
     }
     return chunk(item, esm, cjs);
@@ -175,4 +176,6 @@ const withoutCDN = name =>
   /^(['"`])https?:\/\/(?:unpkg\.com)\/([^@/]+)\S*?\1$/.test(name) ?
     `${RegExp.$1}${RegExp.$2}${RegExp.$1}` : name;
 
+parse.EXPORT = EXPORT;
+parse.IMPORT = IMPORT;
 module.exports = parse;
