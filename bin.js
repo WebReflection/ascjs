@@ -26,7 +26,7 @@ ${'-'.repeat(info.description.length)}
 
 # as executable
 ascjs code
-ascjs sourceFile
+ascjs --ignore=a.js,b.js sourceFile
 ascjs sourceFile destFile
 ascjs sourceFolder destFolder # dest is required
 

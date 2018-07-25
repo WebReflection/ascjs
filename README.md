@@ -32,6 +32,7 @@ ascjs --help
 As executable, you can use _ascjs_ to output, or save, some code content.
 ```sh
 ascjs code
+ascjs --ignore=a.js,b.js sourceFile
 ascjs sourceFile
 ascjs sourceFile destFile
 
