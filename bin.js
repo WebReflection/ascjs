@@ -12,6 +12,7 @@ options.forEach(arg => {
     ignore.push.apply(
       ignore,
       arg.slice(9).replace(/^('|")|('|")$/g, '').split(',')
+          .map(file => path.resolve(__dirname, file))
     );
 });
 
@@ -65,6 +66,7 @@ ${' '.repeat(info.description.length)
         fs.readdir(source, (err, files) => {
           if (err) throw err;
           files.forEach(file => {
+            if (ignore.includes(path.join(source, file))) return;
             fs.stat(path.join(source, file), (err, stat) => {
               if (err) throw err;
               switch (true) {
