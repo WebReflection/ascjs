@@ -1,3 +1,4 @@
+'use strict';
 const parser = require('babylon');
 const defaultOptions = {
   sourceType: 'module',
@@ -178,7 +179,10 @@ const parse = (code, options) => {
     c = chunks[i].end;
   }
   out.push(length ? code.slice(c) : code);
-  return "'use strict';\n" + out.join('');
+  const result = out.join('');
+  return /^(?:#!|['"]use strict['"])/.test(result.trim()) ?
+          result :
+          ("'use strict';\n" + result);
 };
 
 const withoutCDN = name =>

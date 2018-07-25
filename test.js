@@ -129,6 +129,10 @@ const tests = [
   {
     esm: `export default [1, 2, 3]`,
     cjs: `Object.defineProperty(exports, '__esModule', {value: true}).default = [1, 2, 3]`
+  },
+  {
+    esm: `'use strict';\nmodule.exports = 123;`,
+    cjs: `module.exports = 123;`
   }
 ];
 

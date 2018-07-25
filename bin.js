@@ -2,8 +2,21 @@
 
 const ascjs = require('./index.js');
 
-const source = process.argv[2];
-if (/^-/.test(source)) {
+const argv = process.argv.slice(2);
+const files = argv.filter(arg => /^[^-]/.test(arg));
+const options = argv.filter(arg => /^-/.test(arg));
+
+const ignore = [];
+options.forEach(arg => {
+  if (/^--ignore=/.test(arg))
+    ignore.push.apply(
+      ignore,
+      arg.slice(9).replace(/^('|")|('|")$/g, '').split(',')
+    );
+});
+
+const source = files[0];
+if (files.length < 1 && options.length) {
   const info = require('./package.json');
   console.log(`
 \x1B[1mascjs\x1B[0m v${info.version}
@@ -25,9 +38,9 @@ ${'-'.repeat(info.description.length)}
 ${' '.repeat(info.description.length)
       .slice(0, -(3 + info.author.length))}by ${info.author}
 `);
-} else if (source) {
+} else if (files.length) {
   const fs = require('fs');
-  const dest = process.argv[3];
+  const dest = files[1];
   fs.stat(source, (err, stat) => {
     if (err) {
       process.stdout.write(ascjs(source));
