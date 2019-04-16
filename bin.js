@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+const path = require('path');
 const ascjs = require('./index.js');
 
 const argv = process.argv.slice(2);
@@ -52,7 +53,6 @@ ${' '.repeat(info.description.length)
         else process.stdout.write(ascjs(source));
       });
     } else if (stat.isDirectory() && dest && fs.statSync(dest).isDirectory()) {
-      const path = require('path');
       const mkdir = dir => {
         try{ fs.mkdirSync(dir); }
         catch(e){
