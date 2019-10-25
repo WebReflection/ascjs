@@ -30,7 +30,7 @@
     "babylon": "^6.18.0"
   },
   "devDependencies": {
-    "coveralls": "^3.0.0",
+    "coveralls": "^3.0.7",
     "istanbul": "^0.4.5"
   }
 }

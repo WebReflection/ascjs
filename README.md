@@ -33,6 +33,7 @@ As executable, you can use _ascjs_ to output, or save, some code content.
 ```sh
 ascjs code
 ascjs --ignore=a.js,b.js sourceFile
+ascjs --no-default
 ascjs sourceFile
 ascjs sourceFile destFile
 
@@ -69,6 +70,11 @@ ascjs('import "test";');
   * live bindings for exported values are not preserved. You need to delegate in scope eventual changes
   * dynamic `import(...)` is untouched. If you write that, let [Webpack](https://webpack.js.org) handle it for you later on
   * there is no magic whatsoever in module names resolution, what you write in ESM is what you get as CJS
+
+### Flags
+
+  * `--ignore=...` a comma separated paths to ignore parsing
+  * `--no-default` remove the `__esModule` flag and export default via `module.exports = `
 
 ### Example
 This module can transform the following ES2015+ code

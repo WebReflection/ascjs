@@ -1,15 +1,24 @@
 #!/usr/bin/env node
 
 const path = require('path');
-const ascjs = require('./index.js');
+const $ascjs = require('./index.js');
+const ascjs = input => {
+  const output = $ascjs(input);
+  return noDefault ?
+          output.replace(`${$ascjs.EXPORT}.default`, 'module.exports') :
+          output;
+};
 
 const argv = process.argv.slice(2);
 const files = argv.filter(arg => /^[^-]/.test(arg));
 const options = argv.filter(arg => /^-/.test(arg));
 
+let noDefault = false;
 const ignore = [];
 options.forEach(arg => {
-  if (/^--ignore=/.test(arg))
+  if (/^--no-default$/.test(arg))
+    noDefault = true;
+  else if (/^--ignore=/.test(arg))
     ignore.push.apply(
       ignore,
       arg.slice(9).replace(/^('|")|('|")$/g, '').split(',')
@@ -29,6 +38,7 @@ ${'-'.repeat(info.description.length)}
 # as executable
 ascjs code
 ascjs --ignore=a.js,b.js sourceFile
+ascjs --no-default
 ascjs sourceFile destFile
 ascjs sourceFolder destFolder # dest is required
 
