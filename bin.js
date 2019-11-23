@@ -72,6 +72,11 @@ ${' '.repeat(info.description.length)
           }
         }
       };
+      const cjsFolder = path.resolve(process.cwd(), dest);
+      const cjsPackage = path.join(cjsFolder, 'package.json');
+      if (!fs.existsSync(cjsPackage))
+        fs.writeFileSync(cjsPackage, JSON.stringify({type: 'commonjs'}));
+      fs.writeFileSync(dest, ascjs(source));
       (function walkThrough(source, dest) {
         fs.readdir(source, (err, files) => {
           if (err) throw err;
@@ -104,7 +109,7 @@ ${' '.repeat(info.description.length)
         });
       }(
         path.resolve(process.cwd(), source),
-        path.resolve(process.cwd(), dest)
+        cjsFolder
       ));
     } else {
       throw new Error('not sure what to do, try ascjs --help\n');
