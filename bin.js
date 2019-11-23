@@ -63,6 +63,12 @@ ${' '.repeat(info.description.length)
         else process.stdout.write(ascjs(source));
       });
     } else if (stat.isDirectory() && dest && fs.statSync(dest).isDirectory()) {
+      const cjsDest = path.resolve(process.cwd(), dest);
+      process.on('exit', () => {
+        const cjsPackage = path.join(cjsDest, 'package.json');
+        if (!fs.existsSync(cjsPackage))
+          fs.writeFileSync(cjsPackage, JSON.stringify({type: 'commonjs'}));
+      });
       const mkdir = dir => {
         try{ fs.mkdirSync(dir); }
         catch(e){
@@ -72,11 +78,6 @@ ${' '.repeat(info.description.length)
           }
         }
       };
-      const cjsFolder = path.resolve(process.cwd(), dest);
-      const cjsPackage = path.join(cjsFolder, 'package.json');
-      if (!fs.existsSync(cjsPackage))
-        fs.writeFileSync(cjsPackage, JSON.stringify({type: 'commonjs'}));
-      fs.writeFileSync(dest, ascjs(source));
       (function walkThrough(source, dest) {
         fs.readdir(source, (err, files) => {
           if (err) throw err;
@@ -109,7 +110,7 @@ ${' '.repeat(info.description.length)
         });
       }(
         path.resolve(process.cwd(), source),
-        cjsFolder
+        cjsDest
       ));
     } else {
       throw new Error('not sure what to do, try ascjs --help\n');
