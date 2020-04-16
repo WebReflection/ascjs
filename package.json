@@ -27,7 +27,7 @@
   },
   "homepage": "https://github.com/WebReflection/ascjs#readme",
   "dependencies": {
-    "babylon": "^6.18.0"
+    "@babel/parser": "^7.9.4"
   },
   "devDependencies": {
     "coveralls": "^3.0.11",

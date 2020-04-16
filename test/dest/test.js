@@ -3,6 +3,8 @@ const func = (m => m.__esModule ? /* istanbul ignore next */ m.default : /* ista
 const {a, b} = require('./module.js');
 const tmp = require('other');
 
+console.log(({url: require('url').pathToFileURL(__filename).href}).url);
+
 const val = 123;
 
 function test() {
@@ -12,4 +14,3 @@ Object.defineProperty(exports, '__esModule', {value: true}).default = test;
 
 exports.func = func;
 exports.val = val;
-

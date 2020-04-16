@@ -1,32 +1,36 @@
 'use strict';
-const parser = require('babylon');
+const parser = require('@babel/parser');
 const defaultOptions = {
+  allowAwaitOutsideFunction: true,
   sourceType: 'module',
   plugins: [
     'estree',
     'jsx',
-    'flow',
     'typescript',
-    'doExpressions',
-    'objectRestSpread',
-    'decorators',
-    'decorators2',
+    'exportExtensions',
+    'exportDefaultFrom',
+    'exportNamespaceFrom',
+    'dynamicImport',
+    'importMeta',
+    'asyncGenerators',
+    'bigInt',
     'classProperties',
     'classPrivateProperties',
     'classPrivateMethods',
-    'exportExtensions',
-    'asyncGenerators',
+    ['decorators', {decoratorsBeforeExport: true}],
+    'doExpressions',
     'functionBind',
     'functionSent',
-    'dynamicImport',
+    'logicalAssignment',
+    'nullishCoalescingOperator',
     'numericSeparator',
-    'optionalChaining',
-    'importMeta',
-    'bigInt',
+    'objectRestSpread',
     'optionalCatchBinding',
+    'optionalChaining',
+    'partialApplication',
+    ['pipelineOperator', {proposal: 'minimal'}],
     'throwExpressions',
-    'pipelineOperator',
-    'nullishCoalescingOperator'
+    'topLevelAwait'
   ]
 };
 
@@ -147,6 +151,11 @@ const replace = {
 
 const parse = (code, options) => {
   if (!options) options = {};
+  const parserOptions = Object.assign(
+    {},
+    defaultOptions,
+    options
+  );
   parse.info = {
     EXPORT: options.EXPORT || EXPORT,
     IMPORT: options.IMPORT || IMPORT
@@ -156,14 +165,7 @@ const parse = (code, options) => {
   code = code.toString();
   const out = [];
   const chunks = [];
-  const parsed = parser.parse(
-    code,
-    Object.assign(
-      {},
-      defaultOptions,
-      options
-    )
-  );
+  const parsed = parser.parse(code, parserOptions);
   parsed.program.body.forEach(item => {
     if (replace.hasOwnProperty(item.type)) {
       chunks.push(replace[item.type](code, item));
@@ -179,7 +181,10 @@ const parse = (code, options) => {
     c = chunks[i].end;
   }
   out.push(length ? code.slice(c) : code);
-  const result = out.join('');
+  let result = out.join('').replace(
+    /\bimport\.meta\b/g,
+    "({url: require('url').pathToFileURL(__filename).href})"
+  );
   return /^(?:#!|['"]use strict['"])/.test(result.trim()) ?
           result :
           ("'use strict';\n" + result);
