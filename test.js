@@ -3,6 +3,10 @@ const ascjs = require('./index.js');
 const bold = text => `\x1B[1m${text}\x1B[0m`;
 
 const tests = [
+  {
+    esm: 'console.log(import.meta.url);',
+    cjs: `console.log(({url: require('url').pathToFileURL(__filename).href}).url);`
+  },
   // nothing to do
   {
     esm: '',
@@ -10,24 +14,24 @@ const tests = [
   },
   // exports
   {
-    esm: `export { name1, name2, nameN }`,
-    cjs: `exports.name1 = name1\nexports.name2 = name2\nexports.nameN = nameN`
+    esm: `const name1 = 1, name2 = 2, nameN = 3; export { name1, name2, nameN }`,
+    cjs: `const name1 = 1, name2 = 2, nameN = 3; exports.name1 = name1\nexports.name2 = name2\nexports.nameN = nameN`
   },
   {
     esm: `export { name1, name2, nameN } from "module"`,
     cjs: `(m => {\n  exports.name1 = m.name1\n  exports.name2 = m.name2\n  exports.nameN = m.nameN\n})(require("module"));`
   },
   {
-    esm: `export { name0, name1 as default };`,
-    cjs: `exports.name0 = name0;\nObject.defineProperty(exports, '__esModule', {value: true}).default = name1;`
+    esm: `const name0 = 0, name1 = 1; export { name0, name1 as default };`,
+    cjs: `const name0 = 0, name1 = 1; exports.name0 = name0;\nObject.defineProperty(exports, '__esModule', {value: true}).default = name1;`
   },
   {
     esm: `export { name0, name1 as default } from "shenanigans"`,
     cjs: `(m => {\n  exports.name0 = m.name0\n  Object.defineProperty(exports, '__esModule', {value: true}).default = m.name1\n})(require("shenanigans"));`
   },
   {
-    esm: `export { variable1 as name1, variable2 as name2, nameN };`,
-    cjs: `exports.name1 = variable1;\nexports.name2 = variable2;\nexports.nameN = nameN;`
+    esm: `const variable1 = 1, variable2 = 2, nameN = 3; export { variable1 as name1, variable2 as name2, nameN };`,
+    cjs: `const variable1 = 1, variable2 = 2, nameN = 3; exports.name1 = variable1;\nexports.name2 = variable2;\nexports.nameN = nameN;`
   },
   {
     esm: `export let name1 = 1, name2 = function () {}, nameN = 'N';`,
