@@ -5,8 +5,8 @@
   "bin": "bin.js",
   "main": "index.js",
   "scripts": {
-    "coveralls": "cat ./coverage/lcov.info | coveralls",
-    "test": "istanbul cover test.js"
+    "coveralls": "nyc report --reporter=text-lcov | coveralls",
+    "test": "nyc node test.js"
   },
   "repository": {
     "type": "git",
@@ -27,10 +27,10 @@
   },
   "homepage": "https://github.com/WebReflection/ascjs#readme",
   "dependencies": {
-    "@babel/parser": "^7.9.4"
+    "@babel/parser": "^7.9.6"
   },
   "devDependencies": {
-    "coveralls": "^3.0.11",
-    "istanbul": "^0.4.5"
+    "coveralls": "^3.1.0",
+    "nyc": "^15.0.1"
   }
 }
