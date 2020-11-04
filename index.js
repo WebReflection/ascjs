@@ -4,7 +4,7 @@ const defaultOptions = {
   allowAwaitOutsideFunction: true,
   sourceType: 'module',
   plugins: [
-    'estree',
+    // 'estree',
     'jsx',
     'typescript',
     'exportExtensions',
