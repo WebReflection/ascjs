@@ -67,8 +67,7 @@ const tests = [
   },
   {
     esm: `export * as commands from './local.js';`,
-    cjs: `'use strict';\n(m => Object.keys(m).map(k => k !== 'default' && (exports[k] = m[k])))\n(require('./local.js'));
-`
+    cjs: `(m => Object.keys(m).map(k => k !== 'default' && (exports[k] = m[k])))\n(require('./local.js'));`
   },
   // imports
   {
