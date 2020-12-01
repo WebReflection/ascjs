@@ -1,5 +1,6 @@
 import func, {a, b} from './module.js';
 import * as tmp from 'other';
+export * as commands from './local.js'
 
 console.log(import.meta.url);
 
