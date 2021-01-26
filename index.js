@@ -35,7 +35,7 @@ const defaultOptions = {
 };
 
 const EXPORT = `Object.defineProperty(exports, '__esModule', {value: true})`;
-const IMPORT = `(m => m.__esModule ? /* istanbul ignore next */ m.default : /* istanbul ignore next */ m)`;
+const IMPORT = `(m => m.__esModule ? /* c8 ignore next */ m.default : /* c8 ignore next */ m)`;
 const asDefault = name => name === 'default' ? `${parse.info.EXPORT}.default` : `exports.${name}`;
 const fromDefault = defaultImport => `${parse.info.IMPORT}(${defaultImport})`;
 

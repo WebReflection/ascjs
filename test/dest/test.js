@@ -1,5 +1,5 @@
 'use strict';
-const func = (m => m.__esModule ? /* istanbul ignore next */ m.default : /* istanbul ignore next */ m)(require('./module.js'));
+const func = (m => m.__esModule ? /* c8 ignore next */ m.default : /* c8 ignore next */ m)(require('./module.js'));
 const {a, b} = require('./module.js');
 const tmp = require('other');
 
