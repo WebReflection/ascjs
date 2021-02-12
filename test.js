@@ -92,11 +92,11 @@ const tests = [
   },
   {
     esm: `import defaultExport, { otherExport } from "module-name"`,
-    cjs: `const defaultExport = (m => m.__esModule ? /* c8 ignore next */ m.default : /* c8 ignore next */ m)(require("module-name"))\nconst { otherExport } = require("module-name")`
+    cjs: `const defaultExport = (m => /* c8 ignore start */ m.__esModule ? m.default : m /* c8 ignore stop */)(require("module-name"))\nconst { otherExport } = require("module-name")`
   },
   {
     esm: `import defaultExport, * as name from "module-name";`,
-    cjs: `const defaultExport = (m => m.__esModule ? /* c8 ignore next */ m.default : /* c8 ignore next */ m)(require("module-name"));\nconst name = require("module-name");`
+    cjs: `const defaultExport = (m => /* c8 ignore start */ m.__esModule ? m.default : m /* c8 ignore stop */)(require("module-name"));\nconst name = require("module-name");`
   },
   {
     esm: `import "foo";`,
