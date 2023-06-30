@@ -12,7 +12,8 @@ const ascjs = input => {
               index += $0.length + 9;
               const module = output.slice(index, output.indexOf(')', index + 1)).trim();
               return /^['"]\./.test(module) ? '' : $0;
-            }) :
+            })
+            .replace(/(^|[^)])\((require\(.+?\))\)/g, '$1$2') :
           output;
 };
 
