@@ -6,7 +6,8 @@
   "main": "index.js",
   "scripts": {
     "coveralls": "nyc report --reporter=text-lcov | coveralls",
-    "test": "nyc node test.js"
+    "test": "nyc node test.js && npm run test-build",
+    "test-build": "./bin.js test/source test/dest"
   },
   "repository": {
     "type": "git",

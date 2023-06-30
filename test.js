@@ -65,6 +65,10 @@ const tests = [
     esm: `export * from "foo";`,
     cjs: `(m => Object.keys(m).map(k => k !== 'default' && (exports[k] = m[k])))\n(require("foo"));`
   },
+  {
+    esm: `export * as commands from './local.js';`,
+    cjs: `(m => Object.keys(m).map(k => k !== 'default' && (exports[k] = m[k])))\n(require('./local.js'));`
+  },
   // imports
   {
     esm: `import * as name from "module-name";`,
