@@ -2,12 +2,13 @@
 
 const path = require('path');
 const $ascjs = require('./index.js');
+const escape = str => str.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
 const ascjs = input => {
-  const output = $ascjs(input);
+  let output = $ascjs(input);
   return noDefault ?
           output
             .replace(`${$ascjs.EXPORT}.default`, 'module.exports')
-            .replace($ascjs.IMPORT, ($0, index) => {
+            .replace(new RegExp(escape($ascjs.IMPORT), 'g'), ($0, index) => {
               index += $0.length + 9;
               const module = output.slice(index, output.indexOf(')', index + 1)).trim();
               return /^['"]\./.test(module) ? '' : $0;
