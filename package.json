@@ -1,6 +1,6 @@
 {
   "name": "ascjs",
-  "version": "5.0.1",
+  "version": "6.0.0",
   "description": "ES2015 to CommonJS import/export transformer",
   "bin": "bin.js",
   "main": "index.js",
