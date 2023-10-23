@@ -2,7 +2,9 @@
   "name": "ascjs",
   "version": "6.0.3",
   "description": "ES2015 to CommonJS import/export transformer",
-  "bin": "bin.js",
+  "bin": {
+    "ascjs": "bin.js"
+  },
   "main": "index.js",
   "scripts": {
     "coveralls": "nyc report --reporter=text-lcov | coveralls",
